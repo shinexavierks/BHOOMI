@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Enter Delivery Details</h2>
+    <form method="POST" action="{{ url_for('payment') }}">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="number">Phone Number:</label>
+            <input type="text" class="form-control" id="number" name="number" required>
+        </div>
+        <div class="form-group">
+            <label for="house">House, Flat, Building:</label>
+            <input type="text" class="form-control" id="house" name="house" required>
+        </div>
+        <div class="form-group">
+            <label for="area">Area, Street, Sector, Village:</label>
+            <input type="text" class="form-control" id="area" name="area" required>
+        </div>
+        <div class="form-group">
+            <label for="landmark">Landmark:</label>
+            <input type="text" class="form-control" id="landmark" name="landmark">
+        </div>
+        <div class="form-group">
+            <label for="pincode">Pincode:</label>
+            <input type="text" class="form-control" id="pincode" name="pincode" required>
+        </div>
+        <div class="form-group">
+            <label for="city">Town/City:</label>
+            <input type="text" class="form-control" id="city" name="city" required>
+        </div>
+        <div class="form-group">
+            <label for="state">State:</label>
+            <input type="text" class="form-control" id="state" name="state" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Current Location:</label>
+            <input type="text" class="form-control" id="location" name="location" readonly>
+            <button type="button" class="btn btn-primary mt-2" onclick="getLocation()">Use Current Location</button>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById('location').value = 
+                'Latitude: ' + position.coords.latitude + 
+                ', Longitude: ' + position.coords.longitude;
+        });
+    } else { 
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+</script>
+</body>
+</html>

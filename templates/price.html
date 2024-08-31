@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">    <script type="text/JavaScript" src="static/market.js"></script>
+</head>
+<body>
+  
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{{ url_for('index') }}">BHOOMI</a>
+      <div class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('sell') }}"><i class="bi bi-plus-circle"></i> Sell</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('tools') }}"><i class="bi bi-tools"></i> Tools</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('account') }}"><i class="bi bi-person-circle"></i> Account</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+              </li>
+          </ul>
+      </div>
+  </nav>
+
+    <div class="container mt-5">
+        <h1>Price Checker</h1>
+        <form action="{{ url_for('price') }}" method="POST">
+            <div class="form-group">
+                <label for="product">Product:</label>
+                <select class="form-control" name="product" id="product" required>
+                    {% for product in products %}
+                    <option value="{{ product }}">{{ product }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="State" style="font-size: 17px "><b>State</b></label>
+                    <select
+                      onchange="print_city('state', this.selectedIndex);"
+                      id="sts"
+                      name="state"
+                      class="form-control"
+                      style="font-weight: bold; color: black;"
+                      
+                      required
+                    ></select>
+                    <br />
+                    <label for="City" style="font-size: 17px"><b>City</b></label>
+                    <select
+                      id="state"
+                      class="form-control"
+                      name="city"
+                      style="font-weight: bold; color: black;"
+                      required
+                    ></select>
+                    <script language="javascript">
+                      print_state("sts");
+                    </script>
+                  </div>
+            <button type="submit" class="btn btn-primary">Check Price</button>
+        </form>
+    </div>
+</body>
+</html>

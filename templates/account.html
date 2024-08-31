@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - BHOOMI</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">BHOOMI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                {% if user.user_type == 'farmer' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('sell') }}"><i class="bi bi-plus-circle"></i> Sell</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('tools') }}"><i class="bi bi-tools"></i> Tools</a>
+                    </li>
+                {% elif user.user_type == 'buyer' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('checkout') }}"><i class="bi bi-cart"></i> Checkout</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('account') }}"><i class="bi bi-person-circle"></i> Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Account Information -->
+    <div class="container mt-5">
+        <h2 class="mb-4">My Account</h2>
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="bi bi-person-lines-fill"></i> Account Details</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>User Type:</strong> {{ user.user_type.capitalize() }}</p>
+                <p><strong>Email:</strong> {{ user.email if user.email else 'Not Provided' }}</p>
+                <!-- Add more user details here if available -->
+                
+            </div>
+        </div>
+
+        {% if user.user_type == 'farmer' %}
+            <!-- Farmer-specific Information -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><i class="bi bi-basket-fill"></i> My Products</h5>
+                </div>
+                <div class="card-body">
+                    {% if items %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Price (₹)</th>
+                                        <th>Stock</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.stock }}</td>
+                                        <td>
+                                            <a href="{{ url_for('update_item', item_id=item.id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Edit</a>
+                                            <form method="POST" action="{{ url_for('delete_item', item_id=item.id) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p>You have not added any products yet. <a href="{{ url_for('sell') }}">Add a product now.</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% elif user.user_type == 'buyer' %}
+            <!-- Buyer-specific Information -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><i class="bi bi-cart-check-fill"></i> My Orders</h5>
+                </div>
+                <div class="card-body">
+                    {% if orders %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Item Name</th>
+                                        <th>Quantity</th>
+                                        <th>Price per Item (₹)</th>
+                                        <th>Total Amount (₹)</th>
+                                        <th>Seller</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cart_item in cart_items %}
+                                    <tr>
+                                        <td>{{ cart_item.id }}</td>
+                                        <td>{{ cart_item.get_item().name }}</td>
+                                        <td>{{ cart_item.quantity }}</td>
+                                        <td>{{ cart_item.get_item().price }}</td>
+                                        <td>{{ cart_item.get_item().price * cart_item.quantity }}</td>
+                                        <td>{{ cart_item.get_seller().username }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    {% else %}
+                        <p>You have not placed any orders yet. <a href="{{ url_for('index') }}">Shop now.</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

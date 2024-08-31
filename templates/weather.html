@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHOOMI - Weather Forecast</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"></head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">BHOOMI</a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('sell') }}"><i class="bi bi-plus-circle"></i> Sell</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('tools') }}"><i class="bi bi-tools"></i> Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('account') }}"><i class="bi bi-person-circle"></i> Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2>Weather Forecast</h2>
+        <form method="POST" action="{{ url_for('weather') }}">
+            <div class="form-group">
+                <label for="city">Enter City Name</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Forecast</button>
+        </form>
+        {% if pred %}
+        <h3 class="mt-5">Forecast Results:</h3>
+        <ul class="list-group">
+            {% for forecast in pred %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Date:</strong> {{ forecast['dt_txt'] }}<br>
+                        <strong>Temperature:</strong> {{ forecast['main']['temp'] - 273.15 | round(2) }}°C<br> <!-- Converts from Kelvin to Celsius -->
+                        <strong>Weather:</strong> {{ forecast['weather'][0]['description'] }}<br>
+                        <strong>Humidity:</strong> {{ forecast['main']['humidity'] }}%<br>
+                        <strong>Wind Speed:</strong> {{ forecast['wind']['speed'] }} m/s<br>
+                        <strong>Rain (last 3h):</strong> {{ forecast['rain']['3h'] if 'rain' in forecast else '0' }} mm<br>
+                    </div>
+                    <img style="width: 100px; height: 100px;" src="{% if 'rain' in forecast['weather'][0]['description'] %}static/rainy.gif{% elif 'cloud' in forecast['weather'][0]['description'] %}static/cloudy.gif{% else %}static/sunny.gif{% endif %}" alt="Weather Icon" class="weather-icon">
+                </div>
+            </li>
+        {% endfor %}
+        
+        </ul>
+    {% endif %}
+    
+    </div>
+</body>
+</html>

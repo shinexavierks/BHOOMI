@@ -1,0 +1,10 @@
+Flask==2.0.2
+Flask_SQLAlchemy==2.5.1
+MarkupSafe==2.1.1
+numpy==2.1.0
+pandas==2.2.2
+Pillow==10.4.0
+requests==2.31.0
+torch==2.2.1
+torchvision==0.17.1
+Werkzeug==2.0.2
