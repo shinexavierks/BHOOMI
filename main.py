@@ -395,7 +395,7 @@ crop_recommendation_model = pickle.load(
 
 # Custom functions for calculations
 
-weather_api_key = "199784d9705da302d3136982331c245a"
+weather_api_key = ""
 
 def weather_fetch(city_name):
     """
